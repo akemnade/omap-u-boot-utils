@@ -213,10 +213,12 @@ Where:
    -q          : (optional) Ultra quiet - no outputs other than error
    -d device_ID: (optional) USB Device id (Uses default of 0xD009)
    -f input_file: input file to be transmitted to target
-NOTE: it is required to run this program in sudo mode to get access at times
+
+NOTE: To be able to run pusb as ordinary user, copy
+omap-usb-boot.rules to /etc/udev/rules.d
 
 Usage Example:
-Linux: sudo ./pusb -f u-boot.bin
+Linux: ./pusb -f u-boot.bin
 
 7) gpsign help
 ==============

@@ -19,6 +19,8 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 # MA 02111-1307 USA
 
+PREFIX ?= /usr/local
+
 HOSTOS := $(shell uname -s | tr '[:upper:]' '[:lower:]' | \
 	    sed -e "s/\(cygwin\).*/cygwin/")
 srctree := $(if $(SRC),$(SRC),$(CURDIR))
@@ -137,11 +139,19 @@ endif
 	@$(ECHO) "Compiling: " $<
 	$(if $(VERBOSE:1=),@)$(CC) $(CFLAGS) -o $@ -c $<
 
-.PHONY : all
+.PHONY : all install
 
-all: $(PSERIAL_EXE) $(KERMIT_EXE) $(UCMD_EXE) $(GPSIGN_EXE) $(TAGGER_EXE) $(SYSRQ_EXE)
+all: $(PSERIAL_EXE) $(KERMIT_EXE) $(UCMD_EXE) $(GPSIGN_EXE) $(TAGGER_EXE) $(SYSRQ_EXE) $(PUSB_EXE)
 
 usb: $(PUSB_EXE)
+
+
+install: $(PSERIAL_EXE) $(KERMIT_EXE) $(UCMD_EXE) $(GPSIGN_EXE) $(TAGGER_EXE) $(SYSRQ_EXE) $(PUSB_EXE)
+	install -m 755 -d $(DESTDIR)$(PREFIX)/bin
+	install -m 755 -t $(DESTDIR)$(PREFIX)/bin $(PSERIAL_EXE) $(KERMIT_EXE) $(UCMD_EXE) $(GPSIGN_EXE) $(TAGGER_EXE) $(SYSRQ_EXE) $(PUSB_EXE)
+ifndef WINDOWS
+	install -m 644 -t /etc/udev/rules.d omap-usb-boot.rules 
+endif
 
 sty: $(STY_BINS)
 	@$(ECHO) "Completed all sty files"
